@@ -1,0 +1,73 @@
+version: '3.5'
+services:
+  zookeeper:
+    image: zookeeper:3.7
+    hostname: zookeeper
+    networks:
+      clickhouse-network:
+        ipv4_address: 172.23.0.10
+
+  clickhouse01:
+    image: clickhouse/clickhouse-server:22.5
+    hostname: clickhouse01
+    networks:
+      clickhouse-network:
+        ipv4_address: 172.23.0.11
+    ports:
+      - "127.0.0.1:8123:8123"
+      - "127.0.0.1:9000:9000"
+    volumes:
+      - ./clickhouse01:/etc/clickhouse-server
+    depends_on:
+      - zookeeper
+
+  clickhouse02:
+    image: clickhouse/clickhouse-server:22.5
+    hostname: clickhouse02
+    networks:
+      clickhouse-network:
+        ipv4_address: 172.23.0.12
+    volumes:
+      - ./clickhouse02:/etc/clickhouse-server
+    depends_on:
+      - zookeeper
+
+  clickhouse03:
+    image: clickhouse/clickhouse-server:22.5
+    hostname: clickhouse03
+    networks:
+      clickhouse-network:
+        ipv4_address: 172.23.0.13
+    volumes:
+      - ./clickhouse03:/etc/clickhouse-server
+    depends_on:
+      - zookeeper
+
+  clickhouse04:
+    image: clickhouse/clickhouse-server:22.5
+    hostname: clickhouse04
+    networks:
+      clickhouse-network:
+        ipv4_address: 172.23.0.14
+    volumes:
+      - ./clickhouse04:/etc/clickhouse-server
+    depends_on:
+      - zookeeper
+
+#  clickhouse05:
+#    image: clickhouse/clickhouse-server:22.5
+#    hostname: clickhouse05
+#    networks:
+#      clickhouse-network:
+#        ipv4_address: 172.23.0.15
+#    volumes:
+#      - ./clickhouse05:/etc/clickhouse-server
+#    depends_on:
+#      - zookeeper
+
+networks:
+  clickhouse-network:
+    name: clickhouse-network
+    ipam:
+      config:
+        - subnet: 172.23.0.0/24

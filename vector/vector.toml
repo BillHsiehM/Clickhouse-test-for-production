@@ -1,0 +1,15 @@
+[sources.in]
+  type = "http_server"
+  address = "0.0.0.0:8888"
+  encoding = "text"
+
+[sinks.out]
+  type = "clickhouse"
+  inputs = [ "in" ]
+  endpoint = "http://localhost:8123"
+  database = "datasets"
+  table = "test_json_raw"
+  skip_unknown_fields = true
+  auth.strategy="basic"
+  auth.user = "admin"
+  auth.password = "123"
